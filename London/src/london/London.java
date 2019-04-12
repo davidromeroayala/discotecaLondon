@@ -5,16 +5,36 @@
  */
 package london;
 
+
+
+import static ioDatos.Datos.leerarchivo;
 import java.util.ArrayList;
+import javax.swing.DefaultListModel;
 
 /**
  *
  * @author alumno
  */
 public class London extends javax.swing.JFrame {
-    ArrayList<Gente> vGente=new ArrayList<>();
+    ArrayList<Gente> vGente;
+    ArrayList<String> vVips;
+    DefaultListModel<String> mLista;
+    
+    String pagado="";
+    
     public London() {
+        vGente=new ArrayList<>();
+        vVips=new ArrayList<>();
+        vVips=leerarchivo();
         initComponents();
+        mLista = new DefaultListModel<>();
+        jLgente.setModel(mLista);
+        for (String vip :vVips) {
+            
+            mLista.addElement(vip);
+            
+        }
+             
     }
 
     /**
@@ -37,7 +57,7 @@ public class London extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jSPgente = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        jTApagado = new javax.swing.JTextArea();
         jSeparator1 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -45,10 +65,25 @@ public class London extends javax.swing.JFrame {
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("añadir persona"));
 
         jTFnombre.setText("Indique nombre o apodo");
+        jTFnombre.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jTFnombreFocusGained(evt);
+            }
+        });
+        jTFnombre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTFnombreActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Añadir persona ");
 
         jBañadir.setText("Añadir");
+        jBañadir.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jBañadirMouseClicked(evt);
+            }
+        });
         jBañadir.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jBañadirKeyPressed(evt);
@@ -70,18 +105,18 @@ public class London extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jBañadir)
-                .addGap(44, 44, 44))
+                .addGap(48, 48, 48))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(28, 28, 28)
+                .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jTFnombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jBañadir)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Vips"));
@@ -89,13 +124,26 @@ public class London extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jLgente);
 
         jTFbuscar.setText("A quien quieres buscar");
+        jTFbuscar.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jTFbuscarFocusGained(evt);
+            }
+        });
         jTFbuscar.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTFbuscarKeyPressed(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTFbuscarKeyTyped(evt);
+            }
         });
 
         jButton1.setText("Añadir");
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton1MouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -104,12 +152,14 @@ public class London extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jTFbuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jTFbuscar)
                         .addGap(18, 18, 18)
                         .addComponent(jButton1)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -125,9 +175,9 @@ public class London extends javax.swing.JFrame {
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Ya han pagado "));
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jSPgente.setViewportView(jTextArea1);
+        jTApagado.setColumns(20);
+        jTApagado.setRows(5);
+        jSPgente.setViewportView(jTApagado);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -167,7 +217,7 @@ public class London extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jSeparator1)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -178,23 +228,58 @@ public class London extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBañadirKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jBañadirKeyPressed
-     String nombre="";
-     nombre=jTFnombre.getText();
-     Gente g=new Gente(nombre,true);
-     vGente.add(g);
+     
     }//GEN-LAST:event_jBañadirKeyPressed
 
     private void jTFbuscarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTFbuscarKeyPressed
-       String  nombre="";
+      DefaultListModel<String> mListaBuscar= new DefaultListModel<>();
+      mLista.removeAllElements();
+        String  nombre="";
        String  texto="";
        nombre=jTFbuscar.getText();
-        for (Gente gente : vGente) {
-            if(gente.getNombre().indexOf(nombre)>=0){
-            texto=gente.toString();
-            }
+        for (String vip : vVips) {
+            if(vip.indexOf(nombre)>=0){
                 
+                mLista.addElement(vip);
+        
+         
+            }
+          jLgente.setModel(mLista);    
         }
     }//GEN-LAST:event_jTFbuscarKeyPressed
+
+    private void jTFnombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTFnombreActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTFnombreActionPerformed
+
+    private void jTFnombreFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTFnombreFocusGained
+        jTFnombre.setText("");
+    }//GEN-LAST:event_jTFnombreFocusGained
+
+    private void jBañadirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jBañadirMouseClicked
+String nombre="";
+     
+     nombre=jTFnombre.getText();
+     Gente g=new Gente(nombre,true);
+     vGente.add(g);
+       pagado+=g.toString();
+    
+     jTApagado.setText(pagado);
+    }//GEN-LAST:event_jBañadirMouseClicked
+
+    private void jTFbuscarFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTFbuscarFocusGained
+        jTFbuscar.setText("");
+    }//GEN-LAST:event_jTFbuscarFocusGained
+
+    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+        Gente g=new Gente(jLgente.getSelectedValue(),true);
+        pagado+=g.toString();
+        jTApagado.setText(pagado);
+    }//GEN-LAST:event_jButton1MouseClicked
+
+    private void jTFbuscarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTFbuscarKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTFbuscarKeyTyped
 
     /**
      * @param args the command line arguments
@@ -242,8 +327,8 @@ public class London extends javax.swing.JFrame {
     private javax.swing.JScrollPane jSPgente;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JTextArea jTApagado;
     private javax.swing.JTextField jTFbuscar;
     private javax.swing.JTextField jTFnombre;
-    private javax.swing.JTextArea jTextArea1;
     // End of variables declaration//GEN-END:variables
 }
