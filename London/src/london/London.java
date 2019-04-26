@@ -7,8 +7,16 @@ package london;
 
 
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
 import static ioDatos.Datos.leerarchivo;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 
 /**
@@ -58,6 +66,7 @@ public class London extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jSPgente = new javax.swing.JScrollPane();
         jTApagado = new javax.swing.JTextArea();
+        jButton2 = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -179,19 +188,34 @@ public class London extends javax.swing.JFrame {
         jTApagado.setRows(5);
         jSPgente.setViewportView(jTApagado);
 
+        jButton2.setText("Pasar a pdf");
+        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton2MouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jSPgente, javax.swing.GroupLayout.DEFAULT_SIZE, 263, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jButton2)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jSPgente, javax.swing.GroupLayout.DEFAULT_SIZE, 263, Short.MAX_VALUE)
+                        .addContainerGap())))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(jSPgente, javax.swing.GroupLayout.DEFAULT_SIZE, 112, Short.MAX_VALUE)
+                .addComponent(jSPgente, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
+                .addComponent(jButton2)
                 .addContainerGap())
         );
 
@@ -281,6 +305,32 @@ String nombre="";
         // TODO add your handling code here:
     }//GEN-LAST:event_jTFbuscarKeyTyped
 
+    private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
+        //pasar a pdf 
+         // Creamos el documento e indicamos el nombre del fichero.
+      
+            Document elpdf = new Document();
+          
+            try {
+                PdfWriter.getInstance(elpdf,new FileOutputStream("clientes.pdf"));
+                elpdf.open();
+                elpdf.addTitle("listado de entradas Discoteca London");
+                elpdf.addAuthor("dra");
+                String pdf="";
+                for (Gente gente : vGente) {
+                    pdf+=gente.getNombre()+"\n";
+                    System.out.println(gente.getNombre());
+                }
+                elpdf.add(new Paragraph(pdf));
+            } catch (FileNotFoundException ex) {
+                System.out.println("no se ha encontrado el documento");
+            } catch (DocumentException ex) {
+                System.out.println("Error");
+            }
+            elpdf.close();
+            
+    }//GEN-LAST:event_jButton2MouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -319,6 +369,7 @@ String nombre="";
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBañadir;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JList<String> jLgente;
     private javax.swing.JPanel jPanel1;
